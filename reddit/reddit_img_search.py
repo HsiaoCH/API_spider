@@ -1,14 +1,13 @@
 import praw
 import os
 import requests
-import cv2
 import numpy as np
 import argparse
 
 class reddit_img_search:
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--path","-p", required = False, default = "", help = "save where?")
+    parser.add_argument("--path","-p", required = False, default = "", help = "save where")
     parser.add_argument("--sudreddit","-s", required = False, default = "all")
     parser.add_argument("--query","-q", required = False, default = "tree")
     parser.add_argument("--limit","-l", required = False, default = 1000, help = "search limit")
