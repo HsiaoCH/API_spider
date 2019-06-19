@@ -3,22 +3,25 @@ import os
 import requests
 import cv2
 import numpy as np
+import argparse
 
 class reddit_img_search:
-    path =''
-    limit = 10
-    query = 'Mirror Selfie'
-    sudreddit = 'selfie'
-    sort = "top"
 
-    # https://www.reddit.com/prefs/apps
-    reddit = praw.Reddit(
-        client_id="9N0uS0mqciwubQ",
-        client_secret="Q2witqv5fhUSqbQonVGbsNkQn38",
-        user_agent="jim_huav1",
-        username="jim_hua",
-        password="",
-    )
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--path","-p", required = False, default = "", help = "save where?")
+    parser.add_argument("--sudreddit","-s", required = False, default = "all")
+    parser.add_argument("--query","-q", required = False, default = "tree")
+    parser.add_argument("--limit","-l", required = False, default = 1000, help = "search limit")
+    parser.add_argument("--sort", required = False, default = "top", help = "relevance, top, new, comments")
+    args = parser.parse_args()
+
+    path = args.path
+    sudreddit = args.sudreddit
+    query = args.query
+    limit = args.limit
+    sort = args.sort
+
+    reddit = praw.Reddit("bot1")
 
     def __init__(self):
         print('go~~~')
@@ -42,12 +45,13 @@ class reddit_img_search:
         
 
     def wirte_img(self):
-
-        if not os.path.isdir(self.path + self.query + '_' + self.sudreddit):
-            os.mkdir(self.path + self.query + '_' + self.sudreddit)
+        
+        path_all = self.path + self.query + '_' + self.sudreddit + '_' + self.sort
+        if not os.path.isdir(path_all):
+            os.mkdir(path_all)
         for url in self.urls:
             r = requests.get(url)
-            with open(self.path + self.query + '_' + self.sudreddit + '/%s' %os.path.split(url)[-1], 'wb') as f:
+            with open(path_all + '/%s' %os.path.split(url)[-1], 'wb') as f:
                 print(f.name)
                 f.write(r.content)
         print('search: %s/%s'%(self.data, self.max_search))
